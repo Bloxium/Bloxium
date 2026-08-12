@@ -114,7 +114,6 @@ function Bloxium:CreateWindow(config)
 	screenGui.ResetOnSpawn = false
 	screenGui.Parent = guiParent
 	
-	-- Attach notification host to the newly created gui
 	notifyHost.Parent = screenGui 
 
 	-- Main Window Frame
@@ -152,7 +151,6 @@ function Bloxium:CreateWindow(config)
 	topBarHider.BorderSizePixel = 0
 	topBarHider.Parent = topBar
 
-	-- Format Title
 	local titleString = windowTitle
 	if windowSubtitle ~= "" then
 		titleString = windowTitle .. " <font color='#5A78FF'>" .. windowSubtitle .. "</font>"
@@ -262,25 +260,24 @@ function Bloxium:CreateWindow(config)
 	function Window:CreateTab(name)
 		local Tab = {}
 		
-		-- Redesigned Tab Button
+		-- Fixed Tab Button Rendering with Solid Colors & Explicit Sizing
 		local tabBtn = Instance.new("TextButton")
 		tabBtn.Size = UDim2.new(1, -16, 0, 34)
 		tabBtn.BackgroundColor3 = Bloxium.Theme.Element
-		tabBtn.BackgroundTransparency = 1
+		tabBtn.BackgroundTransparency = 0.5
 		tabBtn.AutoButtonColor = false
-		tabBtn.Text = "   " .. name -- Added spaces to act as padding for left alignment
+		tabBtn.Text = name
 		tabBtn.TextColor3 = Bloxium.Theme.TextMuted
 		tabBtn.Font = Enum.Font.GothamSemibold
 		tabBtn.TextSize = 13
-		tabBtn.TextXAlignment = Enum.TextXAlignment.Left
+		tabBtn.TextXAlignment = Enum.TextXAlignment.Center
 		tabBtn.Parent = sidebar
 
 		Instance.new("UICorner", tabBtn).CornerRadius = UDim.new(0, 6)
 
-		-- Active Tab Indicator Line
 		local indicator = Instance.new("Frame")
 		indicator.Size = UDim2.new(0, 3, 0, 16)
-		indicator.Position = UDim2.new(0, 0, 0.5, -8)
+		indicator.Position = UDim2.new(0, 4, 0.5, -8)
 		indicator.BackgroundColor3 = Bloxium.Theme.Accent
 		indicator.BorderSizePixel = 0
 		indicator.BackgroundTransparency = 1
@@ -310,7 +307,7 @@ function Bloxium:CreateWindow(config)
 		local function selectTab()
 			for _, t in pairs(Window.Tabs) do
 				t.Page.Visible = false
-				TweenService:Create(t.Button, TweenInfo.new(0.2), {BackgroundTransparency = 1, TextColor3 = Bloxium.Theme.TextMuted}):Play()
+				TweenService:Create(t.Button, TweenInfo.new(0.2), {BackgroundTransparency = 0.5, TextColor3 = Bloxium.Theme.TextMuted}):Play()
 				TweenService:Create(t.Indicator, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
 			end
 			pageScroll.Visible = true
