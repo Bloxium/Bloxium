@@ -17,7 +17,7 @@ local Bloxium = {
 		Element = Color3.fromRGB(30, 30, 36),
 		Accent = Color3.fromRGB(90, 120, 255),
 		Text = Color3.fromRGB(240, 240, 240),
-		TextMuted = Color3.fromRGB(140, 140, 150),
+		TextMuted = Color3.fromRGB(160, 160, 170),
 		Border = Color3.fromRGB(45, 45, 52)
 	}
 }
@@ -260,11 +260,11 @@ function Bloxium:CreateWindow(config)
 	function Window:CreateTab(name)
 		local Tab = {}
 		
-		-- Fixed Tab Button Rendering with Solid Colors & Explicit Sizing
+		-- Explicit pixel sizing to guarantee buttons render correctly inside the sidebar
 		local tabBtn = Instance.new("TextButton")
-		tabBtn.Size = UDim2.new(1, -16, 0, 34)
+		tabBtn.Size = UDim2.new(0, 134, 0, 34)
 		tabBtn.BackgroundColor3 = Bloxium.Theme.Element
-		tabBtn.BackgroundTransparency = 0.5
+		tabBtn.BackgroundTransparency = 0.4
 		tabBtn.AutoButtonColor = false
 		tabBtn.Text = name
 		tabBtn.TextColor3 = Bloxium.Theme.TextMuted
@@ -307,7 +307,7 @@ function Bloxium:CreateWindow(config)
 		local function selectTab()
 			for _, t in pairs(Window.Tabs) do
 				t.Page.Visible = false
-				TweenService:Create(t.Button, TweenInfo.new(0.2), {BackgroundTransparency = 0.5, TextColor3 = Bloxium.Theme.TextMuted}):Play()
+				TweenService:Create(t.Button, TweenInfo.new(0.2), {BackgroundTransparency = 0.4, TextColor3 = Bloxium.Theme.TextMuted}):Play()
 				TweenService:Create(t.Indicator, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
 			end
 			pageScroll.Visible = true
