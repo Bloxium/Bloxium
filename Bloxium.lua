@@ -223,12 +223,12 @@ function Bloxium:CreateWindow(config)
 
 	local tabListLayout = Instance.new("UIListLayout")
 	tabListLayout.Parent = sidebar
-	tabListLayout.Padding = UDim.new(0, 5)
+	tabListLayout.Padding = UDim.new(0, 6)
 	tabListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	tabListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
 	local tabPadding = Instance.new("UIPadding")
-	tabPadding.PaddingTop = UDim.new(0, 10)
+	tabPadding.PaddingTop = UDim.new(0, 12)
 	tabPadding.Parent = sidebar
 
 	-- Content Display Area
@@ -262,17 +262,31 @@ function Bloxium:CreateWindow(config)
 	function Window:CreateTab(name)
 		local Tab = {}
 		
+		-- Redesigned Tab Button
 		local tabBtn = Instance.new("TextButton")
-		tabBtn.Size = UDim2.new(1, -20, 0, 32)
+		tabBtn.Size = UDim2.new(1, -16, 0, 34)
 		tabBtn.BackgroundColor3 = Bloxium.Theme.Element
 		tabBtn.BackgroundTransparency = 1
-		tabBtn.Text = name
+		tabBtn.AutoButtonColor = false
+		tabBtn.Text = "   " .. name -- Added spaces to act as padding for left alignment
 		tabBtn.TextColor3 = Bloxium.Theme.TextMuted
 		tabBtn.Font = Enum.Font.GothamSemibold
 		tabBtn.TextSize = 13
+		tabBtn.TextXAlignment = Enum.TextXAlignment.Left
 		tabBtn.Parent = sidebar
 
 		Instance.new("UICorner", tabBtn).CornerRadius = UDim.new(0, 6)
+
+		-- Active Tab Indicator Line
+		local indicator = Instance.new("Frame")
+		indicator.Size = UDim2.new(0, 3, 0, 16)
+		indicator.Position = UDim2.new(0, 0, 0.5, -8)
+		indicator.BackgroundColor3 = Bloxium.Theme.Accent
+		indicator.BorderSizePixel = 0
+		indicator.BackgroundTransparency = 1
+		indicator.Parent = tabBtn
+		
+		Instance.new("UICorner", indicator).CornerRadius = UDim.new(1, 0)
 
 		local pageScroll = Instance.new("ScrollingFrame")
 		pageScroll.Size = UDim2.new(1, 0, 1, 0)
@@ -297,15 +311,18 @@ function Bloxium:CreateWindow(config)
 			for _, t in pairs(Window.Tabs) do
 				t.Page.Visible = false
 				TweenService:Create(t.Button, TweenInfo.new(0.2), {BackgroundTransparency = 1, TextColor3 = Bloxium.Theme.TextMuted}):Play()
+				TweenService:Create(t.Indicator, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
 			end
 			pageScroll.Visible = true
 			TweenService:Create(tabBtn, TweenInfo.new(0.2), {BackgroundTransparency = 0, TextColor3 = Bloxium.Theme.Text}):Play()
+			TweenService:Create(indicator, TweenInfo.new(0.2), {BackgroundTransparency = 0}):Play()
 			Window.ActiveTab = Tab
 		end
 
 		tabBtn.MouseButton1Click:Connect(selectTab)
 
 		Tab.Button = tabBtn
+		Tab.Indicator = indicator
 		Tab.Page = pageScroll
 		table.insert(Window.Tabs, Tab)
 
@@ -415,12 +432,12 @@ function Bloxium:CreateWindow(config)
 				toggleBtn.Parent = toggleFrame
 				Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(1, 0)
 
-				local indicator = Instance.new("Frame")
-				indicator.Size = UDim2.new(0, 12, 0, 12)
-				indicator.Position = default and UDim2.new(1, -15, 0.5, -6) or UDim2.new(0, 3, 0.5, -6)
-				indicator.BackgroundColor3 = Bloxium.Theme.Text
-				indicator.Parent = toggleBtn
-				Instance.new("UICorner", indicator).CornerRadius = UDim.new(1, 0)
+				local indicatorFrame = Instance.new("Frame")
+				indicatorFrame.Size = UDim2.new(0, 12, 0, 12)
+				indicatorFrame.Position = default and UDim2.new(1, -15, 0.5, -6) or UDim2.new(0, 3, 0.5, -6)
+				indicatorFrame.BackgroundColor3 = Bloxium.Theme.Text
+				indicatorFrame.Parent = toggleBtn
+				Instance.new("UICorner", indicatorFrame).CornerRadius = UDim.new(1, 0)
 
 				local state = default
 				toggleBtn.MouseButton1Click:Connect(function()
@@ -428,7 +445,7 @@ function Bloxium:CreateWindow(config)
 					local goalPos = state and UDim2.new(1, -15, 0.5, -6) or UDim2.new(0, 3, 0.5, -6)
 					local goalColor = state and Bloxium.Theme.Accent or Color3.fromRGB(45, 45, 50)
 
-					TweenService:Create(indicator, TweenInfo.new(0.2), {Position = goalPos}):Play()
+					TweenService:Create(indicatorFrame, TweenInfo.new(0.2), {Position = goalPos}):Play()
 					TweenService:Create(toggleBtn, TweenInfo.new(0.2), {BackgroundColor3 = goalColor}):Play()
 					callback(state)
 				end)
