@@ -173,7 +173,7 @@ function Bloxium:CreateWindow(config)
 	addCorner(mainFrame, 10)
 	addStroke(mainFrame, Bloxium.Theme.Border, 1, 0)
 
-	-- TopBar Setup (Explicit rounding + patch for bottom corners)
+	-- TopBar Setup
 	local topBar = Instance.new("Frame")
 	topBar.Name = "TopBar"
 	topBar.Size = UDim2.new(1, 0, 0, 42)
@@ -264,7 +264,7 @@ function Bloxium:CreateWindow(config)
 		minBtn.Text = isMinimized and "+" or "−"
 	end)
 
-	-- Sidebar Setup (Explicit rounding + patches for flat interior edges)
+	-- Sidebar Setup
 	local sidebar = Instance.new("Frame")
 	sidebar.Name = "Sidebar"
 	sidebar.Size = UDim2.new(0, 158, 1, -42)
@@ -288,14 +288,21 @@ function Bloxium:CreateWindow(config)
 	sbPatchRight.BorderSizePixel = 0
 	sbPatchRight.Parent = sidebar
 
+	-- Isolated Tab Container so patches don't disrupt UIListLayout
+	local tabContainer = Instance.new("Frame")
+	tabContainer.Name = "TabContainer"
+	tabContainer.Size = UDim2.new(1, 0, 1, 0)
+	tabContainer.BackgroundTransparency = 1
+	tabContainer.Parent = sidebar
+
 	local sidebarPadding = Instance.new("UIPadding")
 	sidebarPadding.PaddingTop = UDim.new(0, 12)
 	sidebarPadding.PaddingLeft = UDim.new(0, 10)
 	sidebarPadding.PaddingRight = UDim.new(0, 10)
-	sidebarPadding.Parent = sidebar
+	sidebarPadding.Parent = tabContainer
 
 	local tabListLayout = Instance.new("UIListLayout")
-	tabListLayout.Parent = sidebar
+	tabListLayout.Parent = tabContainer
 	tabListLayout.Padding = UDim.new(0, 5)
 	tabListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
@@ -342,20 +349,19 @@ function Bloxium:CreateWindow(config)
 		tabBtn.BackgroundColor3 = Bloxium.Theme.Element
 		tabBtn.BackgroundTransparency = 1
 		tabBtn.AutoButtonColor = false
-		tabBtn.Text = "" -- Important: Kept empty so padding doesn't affect the indicator
-		tabBtn.Parent = sidebar
+		tabBtn.Text = ""
+		tabBtn.Parent = tabContainer
 		addCorner(tabBtn, 7)
 
 		local indicator = Instance.new("Frame")
 		indicator.Size = UDim2.new(0, 3, 0, 16)
-		indicator.Position = UDim2.new(0, 8, 0.5, -8) -- Safely pinned to the left
+		indicator.Position = UDim2.new(0, 8, 0.5, -8)
 		indicator.BackgroundColor3 = Bloxium.Theme.Accent
 		indicator.BackgroundTransparency = 1
 		indicator.BorderSizePixel = 0
 		indicator.Parent = tabBtn
 		addCorner(indicator, 2)
 
-		-- Separated the text so it aligns properly without messing with the indicator layout
 		local tabText = Instance.new("TextLabel")
 		tabText.Size = UDim2.new(1, -30, 1, 0)
 		tabText.Position = UDim2.new(0, 24, 0, 0)
@@ -603,38 +609,40 @@ function Bloxium:CreateWindow(config)
 				sliderFrame.Parent = secContainer
 				addCorner(sliderFrame, 6)
 
-				-- Perfectly aligned TextLabel using standardized Position and Size
+				-- Re-aligned header label to share exact baseline position with standard inputs
 				local label = Instance.new("TextLabel")
-				label.Size = UDim2.new(1, -75, 0, 26)
-				label.Position = UDim2.new(0, 12, 0, 0)
+				label.Size = UDim2.new(1, -80, 0, 28)
+				label.Position = UDim2.new(0, 12, 0, 2)
 				label.BackgroundTransparency = 1
 				label.Text = sldName
 				label.TextColor3 = Bloxium.Theme.Text
 				label.Font = Enum.Font.GothamMedium
 				label.TextSize = 11
 				label.TextXAlignment = Enum.TextXAlignment.Left
+				label.TextYAlignment = Enum.TextYAlignment.Center
 				label.Parent = sliderFrame
 
 				local valLabel = Instance.new("TextLabel")
-				valLabel.Size = UDim2.new(0, 70, 0, 26)
-				valLabel.Position = UDim2.new(1, -82, 0, 0)
+				valLabel.Size = UDim2.new(0, 60, 0, 28)
+				valLabel.Position = UDim2.new(1, -72, 0, 2)
 				valLabel.BackgroundTransparency = 1
 				valLabel.Text = tostring(default)
 				valLabel.TextColor3 = Bloxium.Theme.TextMuted
 				valLabel.Font = Enum.Font.GothamMedium
 				valLabel.TextSize = 11
 				valLabel.TextXAlignment = Enum.TextXAlignment.Right
+				valLabel.TextYAlignment = Enum.TextYAlignment.Center
 				valLabel.Parent = sliderFrame
 
 				local track = Instance.new("TextButton")
-				track.Size = UDim2.new(1, -24, 0, 5)
-				track.Position = UDim2.new(0, 12, 0, 32)
+				track.Size = UDim2.new(1, -24, 0, 4)
+				track.Position = UDim2.new(0, 12, 0, 33)
 				track.BackgroundColor3 = Bloxium.Theme.Background
 				track.BorderSizePixel = 0
 				track.Text = ""
 				track.AutoButtonColor = false
 				track.Parent = sliderFrame
-				addCorner(track, 5)
+				addCorner(track, 4)
 
 				local range = math.max(max - min, 1)
 				local initialScale = math.clamp((default - min) / range, 0, 1)
@@ -644,7 +652,7 @@ function Bloxium:CreateWindow(config)
 				fill.BackgroundColor3 = Bloxium.Theme.Accent
 				fill.BorderSizePixel = 0
 				fill.Parent = track
-				addCorner(fill, 5)
+				addCorner(fill, 4)
 
 				local knob = Instance.new("Frame")
 				knob.Size = UDim2.new(0, 10, 0, 10)
