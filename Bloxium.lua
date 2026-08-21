@@ -106,7 +106,7 @@ function Bloxium:Notify(opts)
 	title.BackgroundTransparency = 1
 	title.Text = titleText
 	title.TextColor3 = Bloxium.Theme.Text
-	title.Font = Enum.Font.GothamBold
+	title.Font = Enum.Font.MontserratBold
 	title.TextSize = 11
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.TextTransparency = 1
@@ -118,7 +118,7 @@ function Bloxium:Notify(opts)
 	desc.BackgroundTransparency = 1
 	desc.Text = descText
 	desc.TextColor3 = Bloxium.Theme.TextMuted
-	desc.Font = Enum.Font.GothamMedium
+	desc.Font = Enum.Font.MontserratMedium
 	desc.TextSize = 10
 	desc.TextWrapped = true
 	desc.TextXAlignment = Enum.TextXAlignment.Left
@@ -210,7 +210,7 @@ function Bloxium:CreateWindow(config)
 	title.Text = titleString
 	title.RichText = true
 	title.TextColor3 = Bloxium.Theme.Text
-	title.Font = Enum.Font.GothamBold
+	title.Font = Enum.Font.GothamBold -- Title kept aside from font change
 	title.TextSize = 12
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.Parent = topBar
@@ -222,7 +222,7 @@ function Bloxium:CreateWindow(config)
 	closeBtn.BackgroundTransparency = 1
 	closeBtn.Text = "×"
 	closeBtn.TextColor3 = Bloxium.Theme.TextMuted
-	closeBtn.Font = Enum.Font.Gotham
+	closeBtn.Font = Enum.Font.Montserrat
 	closeBtn.TextSize = 18
 	closeBtn.AutoButtonColor = false
 	closeBtn.Parent = topBar
@@ -243,7 +243,7 @@ function Bloxium:CreateWindow(config)
 	minBtn.BackgroundTransparency = 1
 	minBtn.Text = "−"
 	minBtn.TextColor3 = Bloxium.Theme.TextMuted
-	minBtn.Font = Enum.Font.Gotham
+	minBtn.Font = Enum.Font.Montserrat
 	minBtn.TextSize = 17
 	minBtn.AutoButtonColor = false
 	minBtn.Parent = topBar
@@ -288,7 +288,6 @@ function Bloxium:CreateWindow(config)
 	sbPatchRight.BorderSizePixel = 0
 	sbPatchRight.Parent = sidebar
 
-	-- Isolated Tab Container so patches don't disrupt UIListLayout
 	local tabContainer = Instance.new("Frame")
 	tabContainer.Name = "TabContainer"
 	tabContainer.Size = UDim2.new(1, 0, 1, 0)
@@ -368,7 +367,7 @@ function Bloxium:CreateWindow(config)
 		tabText.BackgroundTransparency = 1
 		tabText.Text = string.upper(name)
 		tabText.TextColor3 = Bloxium.Theme.TextMuted
-		tabText.Font = Enum.Font.GothamMedium
+		tabText.Font = Enum.Font.MontserratMedium
 		tabText.TextSize = 11
 		tabText.TextXAlignment = Enum.TextXAlignment.Left
 		tabText.Parent = tabBtn
@@ -455,7 +454,7 @@ function Bloxium:CreateWindow(config)
 			secTitle.BackgroundTransparency = 1
 			secTitle.Text = string.upper(sectionName)
 			secTitle.TextColor3 = Bloxium.Theme.TextMuted
-			secTitle.Font = Enum.Font.GothamBold
+			secTitle.Font = Enum.Font.MontserratBold
 			secTitle.TextSize = 10
 			secTitle.TextXAlignment = Enum.TextXAlignment.Left
 			secTitle.Parent = sectionFrame
@@ -504,7 +503,7 @@ function Bloxium:CreateWindow(config)
 				btn.BackgroundTransparency = 1
 				btn.Text = btnName
 				btn.TextColor3 = Bloxium.Theme.Text
-				btn.Font = Enum.Font.GothamMedium
+				btn.Font = Enum.Font.MontserratMedium
 				btn.TextSize = 11
 				btn.TextXAlignment = Enum.TextXAlignment.Left
 				btn.AutoButtonColor = false
@@ -552,7 +551,7 @@ function Bloxium:CreateWindow(config)
 				label.BackgroundTransparency = 1
 				label.Text = tglName
 				label.TextColor3 = Bloxium.Theme.Text
-				label.Font = Enum.Font.GothamMedium
+				label.Font = Enum.Font.MontserratMedium
 				label.TextSize = 11
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = toggleFrame
@@ -609,14 +608,13 @@ function Bloxium:CreateWindow(config)
 				sliderFrame.Parent = secContainer
 				addCorner(sliderFrame, 6)
 
-				-- Re-aligned header label to share exact baseline position with standard inputs
 				local label = Instance.new("TextLabel")
 				label.Size = UDim2.new(1, -80, 0, 28)
 				label.Position = UDim2.new(0, 12, 0, 2)
 				label.BackgroundTransparency = 1
 				label.Text = sldName
 				label.TextColor3 = Bloxium.Theme.Text
-				label.Font = Enum.Font.GothamMedium
+				label.Font = Enum.Font.MontserratMedium
 				label.TextSize = 11
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.TextYAlignment = Enum.TextYAlignment.Center
@@ -628,7 +626,7 @@ function Bloxium:CreateWindow(config)
 				valLabel.BackgroundTransparency = 1
 				valLabel.Text = tostring(default)
 				valLabel.TextColor3 = Bloxium.Theme.TextMuted
-				valLabel.Font = Enum.Font.GothamMedium
+				valLabel.Font = Enum.Font.MontserratMedium
 				valLabel.TextSize = 11
 				valLabel.TextXAlignment = Enum.TextXAlignment.Right
 				valLabel.TextYAlignment = Enum.TextYAlignment.Center
@@ -717,7 +715,7 @@ function Bloxium:CreateWindow(config)
 				label.BackgroundTransparency = 1
 				label.Text = ddName
 				label.TextColor3 = Bloxium.Theme.Text
-				label.Font = Enum.Font.GothamMedium
+				label.Font = Enum.Font.MontserratMedium
 				label.TextSize = 11
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = ddFrame
@@ -729,7 +727,7 @@ function Bloxium:CreateWindow(config)
 				openBtn.BorderSizePixel = 0
 				openBtn.Text = selected
 				openBtn.TextColor3 = Bloxium.Theme.TextMuted
-				openBtn.Font = Enum.Font.GothamMedium
+				openBtn.Font = Enum.Font.MontserratMedium
 				openBtn.TextSize = 10
 				openBtn.AutoButtonColor = false
 				openBtn.TextXAlignment = Enum.TextXAlignment.Left
@@ -747,7 +745,7 @@ function Bloxium:CreateWindow(config)
 				arrow.BackgroundTransparency = 1
 				arrow.Text = "⌄"
 				arrow.TextColor3 = Bloxium.Theme.TextMuted
-				arrow.Font = Enum.Font.Gotham
+				arrow.Font = Enum.Font.Montserrat
 				arrow.TextSize = 14
 				arrow.Parent = openBtn
 
@@ -781,7 +779,7 @@ function Bloxium:CreateWindow(config)
 					optBtn.BorderSizePixel = 0
 					optBtn.Text = opt
 					optBtn.TextColor3 = Bloxium.Theme.Text
-					optBtn.Font = Enum.Font.GothamMedium
+					optBtn.Font = Enum.Font.MontserratMedium
 					optBtn.TextSize = 10
 					optBtn.TextXAlignment = Enum.TextXAlignment.Left
 					optBtn.AutoButtonColor = false
@@ -828,7 +826,7 @@ function Bloxium:CreateWindow(config)
 				label.BackgroundTransparency = 1
 				label.Text = txtName
 				label.TextColor3 = Bloxium.Theme.Text
-				label.Font = Enum.Font.GothamMedium
+				label.Font = Enum.Font.MontserratMedium
 				label.TextSize = 11
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = inputFrame
@@ -842,7 +840,7 @@ function Bloxium:CreateWindow(config)
 				textBox.PlaceholderText = placeholder
 				textBox.TextColor3 = Bloxium.Theme.Text
 				textBox.PlaceholderColor3 = Bloxium.Theme.TextDim
-				textBox.Font = Enum.Font.GothamMedium
+				textBox.Font = Enum.Font.MontserratMedium
 				textBox.TextSize = 10
 				textBox.ClearTextOnFocus = false
 				textBox.Parent = inputFrame
@@ -883,7 +881,7 @@ function Bloxium:CreateWindow(config)
 				label.BackgroundTransparency = 1
 				label.Text = kbName
 				label.TextColor3 = Bloxium.Theme.Text
-				label.Font = Enum.Font.GothamMedium
+				label.Font = Enum.Font.MontserratMedium
 				label.TextSize = 11
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = bindFrame
@@ -895,7 +893,7 @@ function Bloxium:CreateWindow(config)
 				bindBtn.BorderSizePixel = 0
 				bindBtn.Text = string.upper(defaultKey.Name)
 				bindBtn.TextColor3 = Bloxium.Theme.TextMuted
-				bindBtn.Font = Enum.Font.GothamMedium
+				bindBtn.Font = Enum.Font.MontserratMedium
 				bindBtn.TextSize = 10
 				bindBtn.AutoButtonColor = false
 				bindBtn.Parent = bindFrame
