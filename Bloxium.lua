@@ -1,4 +1,3 @@
--- Services
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -7,7 +6,6 @@ local CoreGui = game:GetService("CoreGui")
 local player = Players.LocalPlayer
 local guiParent = pcall(function() return CoreGui end) and CoreGui or player:WaitForChild("PlayerGui")
 
--- Library Base
 local Bloxium = {
 	Theme = {
 		Background = Color3.fromRGB(10, 10, 10),
@@ -15,14 +13,13 @@ local Bloxium = {
 		TopBar = Color3.fromRGB(5, 5, 5),
 		Section = Color3.fromRGB(18, 18, 18),
 		Element = Color3.fromRGB(22, 22, 22),
-		Accent = Color3.fromRGB(220, 220, 220), -- Stark terminal contrast
+		Accent = Color3.fromRGB(220, 220, 220),
 		Text = Color3.fromRGB(240, 240, 240),
 		TextMuted = Color3.fromRGB(110, 110, 110),
-		Border = Color3.fromRGB(50, 50, 50) -- Sharp structural lines
+		Border = Color3.fromRGB(50, 50, 50)
 	}
 }
 
--- Notification Host Initialization
 local notifyHost = Instance.new("Frame")
 notifyHost.Name = "NotificationHost"
 notifyHost.Size = UDim2.new(0, 250, 1, -20)
@@ -55,7 +52,7 @@ function Bloxium:Notify(opts)
 	stroke.Thickness = 1
 	stroke.Transparency = 1
 	stroke.Parent = toast
-	
+
 	local leftIndicator = Instance.new("Frame")
 	leftIndicator.Size = UDim2.new(0, 2, 1, 0)
 	leftIndicator.BackgroundColor3 = Bloxium.Theme.Accent
@@ -115,15 +112,13 @@ function Bloxium:CreateWindow(config)
 		ActiveTab = nil
 	}
 
-	-- Root ScreenGui
 	local screenGui = Instance.new("ScreenGui")
 	screenGui.Name = "Bloxium"
 	screenGui.ResetOnSpawn = false
 	screenGui.Parent = guiParent
-	
-	notifyHost.Parent = screenGui 
 
-	-- Main Window Frame
+	notifyHost.Parent = screenGui
+
 	local mainFrame = Instance.new("Frame")
 	mainFrame.Name = "MainFrame"
 	mainFrame.Size = windowSize
@@ -141,7 +136,6 @@ function Bloxium:CreateWindow(config)
 	mainStroke.Thickness = 1
 	mainStroke.Parent = mainFrame
 
-	-- Top Bar Header
 	local topBar = Instance.new("Frame")
 	topBar.Name = "TopBar"
 	topBar.Size = UDim2.new(1, 0, 0, 30)
@@ -150,7 +144,7 @@ function Bloxium:CreateWindow(config)
 	topBar.Parent = mainFrame
 
 	Instance.new("UICorner", topBar).CornerRadius = UDim.new(0, 0)
-	
+
 	local topBarStroke = Instance.new("Frame")
 	topBarStroke.Size = UDim2.new(1, 0, 0, 1)
 	topBarStroke.Position = UDim2.new(0, 0, 1, 0)
@@ -176,7 +170,6 @@ function Bloxium:CreateWindow(config)
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.Parent = topBar
 
-	-- TopBar Control Buttons
 	local closeBtn = Instance.new("TextButton")
 	closeBtn.Size = UDim2.new(0, 30, 0, 30)
 	closeBtn.Position = UDim2.new(1, -30, 0, 0)
@@ -210,7 +203,6 @@ function Bloxium:CreateWindow(config)
 		TweenService:Create(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Linear), {Size = goal}):Play()
 	end)
 
-	-- Sidebar Navigation Area
 	local sidebar = Instance.new("Frame")
 	sidebar.Name = "Sidebar"
 	sidebar.Size = UDim2.new(0, 150, 1, -31)
@@ -219,7 +211,6 @@ function Bloxium:CreateWindow(config)
 	sidebar.BorderSizePixel = 0
 	sidebar.Parent = mainFrame
 
-	-- Fixed Sidebar Divider
 	local sidebarDivider = Instance.new("Frame")
 	sidebarDivider.Name = "SidebarDivider"
 	sidebarDivider.Size = UDim2.new(0, 1, 1, -31)
@@ -238,7 +229,6 @@ function Bloxium:CreateWindow(config)
 	tabPadding.PaddingTop = UDim.new(0, 8)
 	tabPadding.Parent = sidebar
 
-	-- Content Display Area
 	local contentFolder = Instance.new("Frame")
 	contentFolder.Name = "ContentArea"
 	contentFolder.Size = UDim2.new(1, -160, 1, -40)
@@ -246,7 +236,6 @@ function Bloxium:CreateWindow(config)
 	contentFolder.BackgroundTransparency = 1
 	contentFolder.Parent = mainFrame
 
-	-- Window Dragging Logic
 	local dragging, dragStart, startPos
 	topBar.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -265,10 +254,9 @@ function Bloxium:CreateWindow(config)
 		end
 	end)
 
-	-- TAB CREATION API
 	function Window:CreateTab(name)
 		local Tab = {}
-		
+
 		local tabBtn = Instance.new("TextButton")
 		tabBtn.Size = UDim2.new(1, 0, 0, 28)
 		tabBtn.BackgroundColor3 = Bloxium.Theme.Element
@@ -290,7 +278,7 @@ function Bloxium:CreateWindow(config)
 		indicator.BorderSizePixel = 0
 		indicator.BackgroundTransparency = 1
 		indicator.Parent = tabBtn
-		
+
 		Instance.new("UICorner", indicator).CornerRadius = UDim.new(0, 0)
 
 		local pageScroll = Instance.new("ScrollingFrame")
@@ -333,7 +321,6 @@ function Bloxium:CreateWindow(config)
 
 		if #Window.Tabs == 1 then selectTab() end
 
-		-- SECTION CREATION API
 		function Tab:CreateSection(sectionName)
 			local Section = {}
 
@@ -376,7 +363,6 @@ function Bloxium:CreateWindow(config)
 			end
 			secLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateSectionHeight)
 
-			-- 1. BUTTON
 			function Section:CreateButton(opts)
 				local btnName = string.upper(opts.Name or "Execute")
 				local callback = opts.Callback or function() end
@@ -386,11 +372,6 @@ function Bloxium:CreateWindow(config)
 				btnFrame.BackgroundColor3 = Bloxium.Theme.Element
 				btnFrame.Parent = secContainer
 				Instance.new("UICorner", btnFrame).CornerRadius = UDim.new(0, 0)
-				
-				local btnStroke = Instance.new("UIStroke")
-				btnStroke.Color = Bloxium.Theme.Border
-				btnStroke.Thickness = 1
-				btnStroke.Parent = btnFrame
 
 				local btn = Instance.new("TextButton")
 				btn.Size = UDim2.new(1, 0, 1, 0)
@@ -406,12 +387,11 @@ function Bloxium:CreateWindow(config)
 					tween:Play()
 					tween.Completed:Wait()
 					TweenService:Create(btnFrame, TweenInfo.new(0.2), {BackgroundColor3 = Bloxium.Theme.Element}):Play()
-					
+
 					task.spawn(callback)
 				end)
 			end
 
-			-- 2. TOGGLE
 			function Section:CreateToggle(opts)
 				local tglName = string.upper(opts.Name or "Override")
 				local default = opts.Default or false
@@ -422,11 +402,6 @@ function Bloxium:CreateWindow(config)
 				toggleFrame.BackgroundColor3 = Bloxium.Theme.Element
 				toggleFrame.Parent = secContainer
 				Instance.new("UICorner", toggleFrame).CornerRadius = UDim.new(0, 0)
-				
-				local tglStroke = Instance.new("UIStroke")
-				tglStroke.Color = Bloxium.Theme.Border
-				tglStroke.Thickness = 1
-				tglStroke.Parent = toggleFrame
 
 				local label = Instance.new("TextLabel")
 				label.Size = UDim2.new(0.7, 0, 1, 0)
@@ -446,11 +421,6 @@ function Bloxium:CreateWindow(config)
 				toggleBtn.Text = ""
 				toggleBtn.Parent = toggleFrame
 				Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(0, 0)
-				
-				local btnStroke = Instance.new("UIStroke")
-				btnStroke.Color = Bloxium.Theme.Border
-				btnStroke.Thickness = 1
-				btnStroke.Parent = toggleBtn
 
 				local indicatorFrame = Instance.new("Frame")
 				indicatorFrame.Size = UDim2.new(0, 14, 0, 14)
@@ -470,7 +440,6 @@ function Bloxium:CreateWindow(config)
 				end)
 			end
 
-			-- 3. SLIDER
 			function Section:CreateSlider(opts)
 				local sldName = string.upper(opts.Name or "Capacity")
 				local min = opts.Min or 0
@@ -483,11 +452,6 @@ function Bloxium:CreateWindow(config)
 				sliderFrame.BackgroundColor3 = Bloxium.Theme.Element
 				sliderFrame.Parent = secContainer
 				Instance.new("UICorner", sliderFrame).CornerRadius = UDim.new(0, 0)
-				
-				local sldStroke = Instance.new("UIStroke")
-				sldStroke.Color = Bloxium.Theme.Border
-				sldStroke.Thickness = 1
-				sldStroke.Parent = sliderFrame
 
 				local label = Instance.new("TextLabel")
 				label.Size = UDim2.new(0.5, 0, 0, 22)
@@ -553,7 +517,6 @@ function Bloxium:CreateWindow(config)
 				end)
 			end
 
-			-- 4. DROPDOWN
 			function Section:CreateDropdown(opts)
 				local ddName = string.upper(opts.Name or "Select Data")
 				local options = opts.Options or {}
@@ -566,11 +529,6 @@ function Bloxium:CreateWindow(config)
 				ddFrame.ClipsDescendants = true
 				ddFrame.Parent = secContainer
 				Instance.new("UICorner", ddFrame).CornerRadius = UDim.new(0, 0)
-				
-				local ddStroke = Instance.new("UIStroke")
-				ddStroke.Color = Bloxium.Theme.Border
-				ddStroke.Thickness = 1
-				ddStroke.Parent = ddFrame
 
 				local label = Instance.new("TextLabel")
 				label.Size = UDim2.new(0.5, 0, 0, 28)
@@ -593,11 +551,6 @@ function Bloxium:CreateWindow(config)
 				openBtn.TextSize = 11
 				openBtn.Parent = ddFrame
 				Instance.new("UICorner", openBtn).CornerRadius = UDim.new(0, 0)
-				
-				local obStroke = Instance.new("UIStroke")
-				obStroke.Color = Bloxium.Theme.Border
-				obStroke.Thickness = 1
-				obStroke.Parent = openBtn
 
 				local optionContainer = Instance.new("Frame")
 				optionContainer.Size = UDim2.new(1, -20, 0, #options * 22)
@@ -629,7 +582,7 @@ function Bloxium:CreateWindow(config)
 					optBtn.TextXAlignment = Enum.TextXAlignment.Left
 					optBtn.Parent = optionContainer
 					Instance.new("UICorner", optBtn).CornerRadius = UDim.new(0, 0)
-					
+
 					local optP = Instance.new("UIPadding")
 					optP.PaddingLeft = UDim.new(0, 5)
 					optP.Parent = optBtn
@@ -645,7 +598,6 @@ function Bloxium:CreateWindow(config)
 				end
 			end
 
-			-- 5. TEXT BOX
 			function Section:CreateTextInput(opts)
 				local txtName = string.upper(opts.Name or "Input")
 				local placeholder = opts.Placeholder or "AWAITING..."
@@ -656,11 +608,6 @@ function Bloxium:CreateWindow(config)
 				inputFrame.BackgroundColor3 = Bloxium.Theme.Element
 				inputFrame.Parent = secContainer
 				Instance.new("UICorner", inputFrame).CornerRadius = UDim.new(0, 0)
-				
-				local inpStroke = Instance.new("UIStroke")
-				inpStroke.Color = Bloxium.Theme.Border
-				inpStroke.Thickness = 1
-				inpStroke.Parent = inputFrame
 
 				local label = Instance.new("TextLabel")
 				label.Size = UDim2.new(0.5, 0, 1, 0)
@@ -685,18 +632,12 @@ function Bloxium:CreateWindow(config)
 				textBox.TextSize = 11
 				textBox.Parent = inputFrame
 				Instance.new("UICorner", textBox).CornerRadius = UDim.new(0, 0)
-				
-				local tbStroke = Instance.new("UIStroke")
-				tbStroke.Color = Bloxium.Theme.Border
-				tbStroke.Thickness = 1
-				tbStroke.Parent = textBox
 
 				textBox.FocusLost:Connect(function(enterPressed)
 					callback(textBox.Text, enterPressed)
 				end)
 			end
 
-			-- 6. KEYBIND
 			function Section:CreateKeybind(opts)
 				local kbName = string.upper(opts.Name or "Bind")
 				local defaultKey = opts.Default or Enum.KeyCode.E
@@ -707,11 +648,6 @@ function Bloxium:CreateWindow(config)
 				bindFrame.BackgroundColor3 = Bloxium.Theme.Element
 				bindFrame.Parent = secContainer
 				Instance.new("UICorner", bindFrame).CornerRadius = UDim.new(0, 0)
-				
-				local kbStroke = Instance.new("UIStroke")
-				kbStroke.Color = Bloxium.Theme.Border
-				kbStroke.Thickness = 1
-				kbStroke.Parent = bindFrame
 
 				local label = Instance.new("TextLabel")
 				label.Size = UDim2.new(0.5, 0, 1, 0)
@@ -734,11 +670,6 @@ function Bloxium:CreateWindow(config)
 				bindBtn.TextSize = 11
 				bindBtn.Parent = bindFrame
 				Instance.new("UICorner", bindBtn).CornerRadius = UDim.new(0, 0)
-				
-				local bbStroke = Instance.new("UIStroke")
-				bbStroke.Color = Bloxium.Theme.Border
-				bbStroke.Thickness = 1
-				bbStroke.Parent = bindBtn
 
 				local currentKey = defaultKey
 				local isListening = false
@@ -757,10 +688,10 @@ function Bloxium:CreateWindow(config)
 							currentKey = input.KeyCode
 							bindBtn.Text = "[" .. string.upper(currentKey.Name) .. "]"
 						end
-						
+
 						bindBtn.TextColor3 = Bloxium.Theme.TextMuted
 						isListening = false
-						
+
 					elseif not isListening and not gameProcessed then
 						if input.KeyCode == currentKey then
 							callback(currentKey)
