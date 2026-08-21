@@ -1,3 +1,4 @@
+-- Bloxium Agent Console redesign
 -- Services
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
@@ -9,16 +10,17 @@ local guiParent = pcall(function() return CoreGui end) and CoreGui or player:Wai
 
 -- Library Base
 local Bloxium = {
+	Version = "2.1-field",
 	Theme = {
-		Background = Color3.fromRGB(15, 15, 18),
-		Sidebar = Color3.fromRGB(20, 20, 24),
-		TopBar = Color3.fromRGB(22, 22, 26),
-		Section = Color3.fromRGB(22, 22, 26),
-		Element = Color3.fromRGB(30, 30, 36),
-		Accent = Color3.fromRGB(90, 120, 255),
-		Text = Color3.fromRGB(240, 240, 240),
-		TextMuted = Color3.fromRGB(160, 160, 170),
-		Border = Color3.fromRGB(45, 45, 52)
+		Background = Color3.fromRGB(13, 14, 13),
+		Sidebar = Color3.fromRGB(17, 18, 17),
+		TopBar = Color3.fromRGB(18, 19, 18),
+		Section = Color3.fromRGB(20, 21, 20),
+		Element = Color3.fromRGB(25, 26, 24),
+		Accent = Color3.fromRGB(176, 146, 68),
+		Text = Color3.fromRGB(225, 224, 216),
+		TextMuted = Color3.fromRGB(139, 140, 132),
+		Border = Color3.fromRGB(53, 54, 49)
 	}
 }
 
@@ -48,7 +50,7 @@ function Bloxium:Notify(opts)
 	toast.BackgroundTransparency = 1
 	toast.Parent = notifyHost
 
-	Instance.new("UICorner", toast).CornerRadius = UDim.new(0, 6)
+	Instance.new("UICorner", toast).CornerRadius = UDim.new(0, 2)
 
 	local stroke = Instance.new("UIStroke")
 	stroke.Color = Bloxium.Theme.Accent
@@ -62,7 +64,7 @@ function Bloxium:Notify(opts)
 	title.BackgroundTransparency = 1
 	title.Text = titleText
 	title.TextColor3 = Bloxium.Theme.Text
-	title.Font = Enum.Font.GothamBold
+	title.Font = Enum.Font.SourceSansBold
 	title.TextSize = 13
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.TextTransparency = 1
@@ -99,9 +101,9 @@ end
 
 function Bloxium:CreateWindow(config)
 	config = config or {}
-	local windowTitle = config.Title or "Bloxium"
-	local windowSubtitle = config.Subtitle or ""
-	local windowSize = config.Size or UDim2.fromOffset(620, 420)
+	local windowTitle = config.Title or "BLOXIUM"
+	local windowSubtitle = config.Subtitle or "FIELD CONSOLE"
+	local windowSize = config.Size or UDim2.fromOffset(670, 445)
 
 	local Window = {
 		Tabs = {},
@@ -127,7 +129,7 @@ function Bloxium:CreateWindow(config)
 	mainFrame.ClipsDescendants = true
 	mainFrame.Parent = screenGui
 
-	Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 8)
+	Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 3)
 
 	local mainStroke = Instance.new("UIStroke")
 	mainStroke.Color = Bloxium.Theme.Border
@@ -142,7 +144,7 @@ function Bloxium:CreateWindow(config)
 	topBar.BorderSizePixel = 0
 	topBar.Parent = mainFrame
 
-	Instance.new("UICorner", topBar).CornerRadius = UDim.new(0, 8)
+	Instance.new("UICorner", topBar).CornerRadius = UDim.new(0, 3)
 
 	local topBarHider = Instance.new("Frame")
 	topBarHider.Size = UDim2.new(1, 0, 0, 10)
@@ -151,9 +153,28 @@ function Bloxium:CreateWindow(config)
 	topBarHider.BorderSizePixel = 0
 	topBarHider.Parent = topBar
 
+	-- Operational header details
+	local headerRule = Instance.new("Frame")
+	headerRule.Size = UDim2.new(1, -30, 0, 1)
+	headerRule.Position = UDim2.new(0, 15, 1, -1)
+	headerRule.BackgroundColor3 = Bloxium.Theme.Border
+	headerRule.BorderSizePixel = 0
+	headerRule.Parent = topBar
+
+	local clearance = Instance.new("TextLabel")
+	clearance.Size = UDim2.new(0, 180, 0, 18)
+	clearance.Position = UDim2.new(0, 15, 0, 27)
+	clearance.BackgroundTransparency = 1
+	clearance.Text = "FIELD NETWORK // ACTIVE"
+	clearance.TextColor3 = Bloxium.Theme.TextMuted
+	clearance.Font = Enum.Font.Code
+	clearance.TextSize = 9
+	clearance.TextXAlignment = Enum.TextXAlignment.Left
+	clearance.Parent = topBar
+
 	local titleString = windowTitle
 	if windowSubtitle ~= "" then
-		titleString = windowTitle .. " <font color='#5A78FF'>" .. windowSubtitle .. "</font>"
+		titleString = windowTitle .. " <font color='#B09244'>" .. windowSubtitle .. "</font>"
 	end
 
 	local title = Instance.new("TextLabel")
@@ -164,8 +185,8 @@ function Bloxium:CreateWindow(config)
 	title.Text = titleString
 	title.RichText = true
 	title.TextColor3 = Bloxium.Theme.Text
-	title.Font = Enum.Font.GothamBold
-	title.TextSize = 14
+	title.Font = Enum.Font.SourceSansBold
+	title.TextSize = 13
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.Parent = topBar
 
@@ -206,7 +227,7 @@ function Bloxium:CreateWindow(config)
 	-- Sidebar Navigation Area
 	local sidebar = Instance.new("Frame")
 	sidebar.Name = "Sidebar"
-	sidebar.Size = UDim2.new(0, 150, 1, -40)
+	sidebar.Size = UDim2.new(0, 132, 1, -40)
 	sidebar.Position = UDim2.new(0, 0, 0, 40)
 	sidebar.BackgroundColor3 = Bloxium.Theme.Sidebar
 	sidebar.BorderSizePixel = 0
@@ -216,28 +237,50 @@ function Bloxium:CreateWindow(config)
 	local sidebarDivider = Instance.new("Frame")
 	sidebarDivider.Name = "SidebarDivider"
 	sidebarDivider.Size = UDim2.new(0, 1, 1, -40)
-	sidebarDivider.Position = UDim2.new(0, 149, 0, 40)
+	sidebarDivider.Position = UDim2.new(0, 131, 0, 40)
 	sidebarDivider.BackgroundColor3 = Bloxium.Theme.Border
 	sidebarDivider.BorderSizePixel = 0
 	sidebarDivider.Parent = mainFrame
 
+	local sidebarHeader = Instance.new("TextLabel")
+	sidebarHeader.Size = UDim2.new(1, -20, 0, 18)
+	sidebarHeader.Position = UDim2.new(0, 10, 0, 8)
+	sidebarHeader.BackgroundTransparency = 1
+	sidebarHeader.Text = "DIRECTORY"
+	sidebarHeader.TextColor3 = Bloxium.Theme.TextMuted
+	sidebarHeader.Font = Enum.Font.Code
+	sidebarHeader.TextSize = 9
+	sidebarHeader.TextXAlignment = Enum.TextXAlignment.Left
+	sidebarHeader.Parent = sidebar
+
 	local tabListLayout = Instance.new("UIListLayout")
 	tabListLayout.Parent = sidebar
-	tabListLayout.Padding = UDim.new(0, 6)
+	tabListLayout.Padding = UDim.new(0, 2)
 	tabListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	tabListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
 	local tabPadding = Instance.new("UIPadding")
-	tabPadding.PaddingTop = UDim.new(0, 12)
+	tabPadding.PaddingTop = UDim.new(0, 34)
 	tabPadding.Parent = sidebar
 
 	-- Content Display Area
 	local contentFolder = Instance.new("Frame")
 	contentFolder.Name = "ContentArea"
-	contentFolder.Size = UDim2.new(1, -160, 1, -50)
-	contentFolder.Position = UDim2.new(0, 155, 0, 45)
+	contentFolder.Size = UDim2.new(1, -142, 1, -58)
+	contentFolder.Position = UDim2.new(0, 141, 0, 49)
 	contentFolder.BackgroundTransparency = 1
 	contentFolder.Parent = mainFrame
+
+	local statusLine = Instance.new("TextLabel")
+	statusLine.Size = UDim2.new(1, -155, 0, 14)
+	statusLine.Position = UDim2.new(0, 145, 1, -20)
+	statusLine.BackgroundTransparency = 1
+	statusLine.Text = "SECURE CHANNEL  •  LOCAL SESSION"
+	statusLine.TextColor3 = Bloxium.Theme.TextMuted
+	statusLine.Font = Enum.Font.Code
+	statusLine.TextSize = 9
+	statusLine.TextXAlignment = Enum.TextXAlignment.Right
+	statusLine.Parent = mainFrame
 
 	-- Window Dragging Logic
 	local dragging, dragStart, startPos
@@ -263,22 +306,22 @@ function Bloxium:CreateWindow(config)
 		local Tab = {}
 		
 		local tabBtn = Instance.new("TextButton")
-		tabBtn.Size = UDim2.new(0, 134, 0, 34)
-		tabBtn.BackgroundColor3 = Bloxium.Theme.Element
-		tabBtn.BackgroundTransparency = 0.4
+		tabBtn.Size = UDim2.new(0, 116, 0, 32)
+		tabBtn.BackgroundColor3 = Bloxium.Theme.Sidebar
+		tabBtn.BackgroundTransparency = 1
 		tabBtn.AutoButtonColor = false
 		tabBtn.Text = name
 		tabBtn.TextColor3 = Bloxium.Theme.TextMuted
-		tabBtn.Font = Enum.Font.GothamSemibold
-		tabBtn.TextSize = 13
+		tabBtn.Font = Enum.Font.SourceSansSemibold
+		tabBtn.TextSize = 12
 		tabBtn.TextXAlignment = Enum.TextXAlignment.Center
 		tabBtn.Parent = sidebar
 
-		Instance.new("UICorner", tabBtn).CornerRadius = UDim.new(0, 6)
+		Instance.new("UICorner", tabBtn).CornerRadius = UDim.new(0, 2)
 
 		local indicator = Instance.new("Frame")
-		indicator.Size = UDim2.new(0, 3, 0, 16)
-		indicator.Position = UDim2.new(0, 4, 0.5, -8)
+		indicator.Size = UDim2.new(0, 2, 0, 18)
+		indicator.Position = UDim2.new(0, 0, 0.5, -9)
 		indicator.BackgroundColor3 = Bloxium.Theme.Accent
 		indicator.BorderSizePixel = 0
 		indicator.BackgroundTransparency = 1
@@ -297,7 +340,7 @@ function Bloxium:CreateWindow(config)
 
 		local pageLayout = Instance.new("UIListLayout")
 		pageLayout.Parent = pageScroll
-		pageLayout.Padding = UDim.new(0, 12)
+		pageLayout.Padding = UDim.new(0, 8)
 		pageLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 		pageLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
@@ -308,11 +351,11 @@ function Bloxium:CreateWindow(config)
 		local function selectTab()
 			for _, t in pairs(Window.Tabs) do
 				t.Page.Visible = false
-				TweenService:Create(t.Button, TweenInfo.new(0.2), {BackgroundTransparency = 0.4, TextColor3 = Bloxium.Theme.TextMuted}):Play()
+				TweenService:Create(t.Button, TweenInfo.new(0.16), {BackgroundTransparency = 1, TextColor3 = Bloxium.Theme.TextMuted}):Play()
 				TweenService:Create(t.Indicator, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
 			end
 			pageScroll.Visible = true
-			TweenService:Create(tabBtn, TweenInfo.new(0.2), {BackgroundTransparency = 0, TextColor3 = Bloxium.Theme.Text}):Play()
+			TweenService:Create(tabBtn, TweenInfo.new(0.16), {BackgroundTransparency = 0.92, TextColor3 = Bloxium.Theme.Text}):Play()
 			TweenService:Create(indicator, TweenInfo.new(0.2), {BackgroundTransparency = 0}):Play()
 			Window.ActiveTab = Tab
 		end
@@ -331,11 +374,11 @@ function Bloxium:CreateWindow(config)
 			local Section = {}
 
 			local sectionFrame = Instance.new("Frame")
-			sectionFrame.Size = UDim2.new(1, -10, 0, 30)
+			sectionFrame.Size = UDim2.new(1, -8, 0, 30)
 			sectionFrame.BackgroundColor3 = Bloxium.Theme.Section
 			sectionFrame.Parent = pageScroll
 
-			Instance.new("UICorner", sectionFrame).CornerRadius = UDim.new(0, 6)
+			Instance.new("UICorner", sectionFrame).CornerRadius = UDim.new(0, 2)
 
 			local secStroke = Instance.new("UIStroke")
 			secStroke.Color = Bloxium.Theme.Border
@@ -347,9 +390,9 @@ function Bloxium:CreateWindow(config)
 			secTitle.Position = UDim2.new(0, 10, 0, 5)
 			secTitle.BackgroundTransparency = 1
 			secTitle.Text = sectionName
-			secTitle.TextColor3 = Bloxium.Theme.Accent
-			secTitle.Font = Enum.Font.GothamBold
-			secTitle.TextSize = 12
+			secTitle.TextColor3 = Bloxium.Theme.TextMuted
+			secTitle.Font = Enum.Font.SourceSansBold
+			secTitle.TextSize = 11
 			secTitle.TextXAlignment = Enum.TextXAlignment.Left
 			secTitle.Parent = sectionFrame
 
@@ -378,15 +421,15 @@ function Bloxium:CreateWindow(config)
 				btnFrame.Size = UDim2.new(1, 0, 0, 36)
 				btnFrame.BackgroundColor3 = Bloxium.Theme.Element
 				btnFrame.Parent = secContainer
-				Instance.new("UICorner", btnFrame).CornerRadius = UDim.new(0, 4)
+				Instance.new("UICorner", btnFrame).CornerRadius = UDim.new(0, 2)
 
 				local btn = Instance.new("TextButton")
 				btn.Size = UDim2.new(1, 0, 1, 0)
 				btn.BackgroundTransparency = 1
 				btn.Text = btnName
 				btn.TextColor3 = Bloxium.Theme.Text
-				btn.Font = Enum.Font.GothamSemibold
-				btn.TextSize = 13
+				btn.Font = Enum.Font.SourceSansSemibold
+				btn.TextSize = 12
 				btn.Parent = btnFrame
 
 				btn.MouseButton1Click:Connect(function()
@@ -409,7 +452,7 @@ function Bloxium:CreateWindow(config)
 				toggleFrame.Size = UDim2.new(1, 0, 0, 32)
 				toggleFrame.BackgroundColor3 = Bloxium.Theme.Element
 				toggleFrame.Parent = secContainer
-				Instance.new("UICorner", toggleFrame).CornerRadius = UDim.new(0, 4)
+				Instance.new("UICorner", toggleFrame).CornerRadius = UDim.new(0, 2)
 
 				local label = Instance.new("TextLabel")
 				label.Size = UDim2.new(0.7, 0, 1, 0)
@@ -417,8 +460,8 @@ function Bloxium:CreateWindow(config)
 				label.BackgroundTransparency = 1
 				label.Text = tglName
 				label.TextColor3 = Bloxium.Theme.Text
-				label.Font = Enum.Font.GothamSemibold
-				label.TextSize = 13
+				label.Font = Enum.Font.SourceSansSemibold
+				label.TextSize = 12
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = toggleFrame
 
@@ -428,12 +471,12 @@ function Bloxium:CreateWindow(config)
 				toggleBtn.BackgroundColor3 = default and Bloxium.Theme.Accent or Color3.fromRGB(45, 45, 50)
 				toggleBtn.Text = ""
 				toggleBtn.Parent = toggleFrame
-				Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(1, 0)
+				Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(0, 2)
 
 				local indicatorFrame = Instance.new("Frame")
 				indicatorFrame.Size = UDim2.new(0, 12, 0, 12)
 				indicatorFrame.Position = default and UDim2.new(1, -15, 0.5, -6) or UDim2.new(0, 3, 0.5, -6)
-				indicatorFrame.BackgroundColor3 = Bloxium.Theme.Text
+				indicatorFrame.BackgroundColor3 = Color3.fromRGB(232, 231, 223)
 				indicatorFrame.Parent = toggleBtn
 				Instance.new("UICorner", indicatorFrame).CornerRadius = UDim.new(1, 0)
 
@@ -461,7 +504,7 @@ function Bloxium:CreateWindow(config)
 				sliderFrame.Size = UDim2.new(1, 0, 0, 48)
 				sliderFrame.BackgroundColor3 = Bloxium.Theme.Element
 				sliderFrame.Parent = secContainer
-				Instance.new("UICorner", sliderFrame).CornerRadius = UDim.new(0, 4)
+				Instance.new("UICorner", sliderFrame).CornerRadius = UDim.new(0, 2)
 
 				local label = Instance.new("TextLabel")
 				label.Size = UDim2.new(0.5, 0, 0, 22)
@@ -469,8 +512,8 @@ function Bloxium:CreateWindow(config)
 				label.BackgroundTransparency = 1
 				label.Text = sldName
 				label.TextColor3 = Bloxium.Theme.Text
-				label.Font = Enum.Font.GothamSemibold
-				label.TextSize = 13
+				label.Font = Enum.Font.SourceSansSemibold
+				label.TextSize = 12
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = sliderFrame
 
@@ -492,13 +535,13 @@ function Bloxium:CreateWindow(config)
 				track.Text = ""
 				track.AutoButtonColor = false
 				track.Parent = sliderFrame
-				Instance.new("UICorner", track).CornerRadius = UDim.new(1, 0)
+				Instance.new("UICorner", track).CornerRadius = UDim.new(0, 2)
 
 				local fill = Instance.new("Frame")
 				fill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
 				fill.BackgroundColor3 = Bloxium.Theme.Accent
 				fill.Parent = track
-				Instance.new("UICorner", fill).CornerRadius = UDim.new(1, 0)
+				Instance.new("UICorner", fill).CornerRadius = UDim.new(0, 2)
 
 				local dragging = false
 				local function updateSlider(input)
@@ -539,7 +582,7 @@ function Bloxium:CreateWindow(config)
 				ddFrame.BackgroundColor3 = Bloxium.Theme.Element
 				ddFrame.ClipsDescendants = true
 				ddFrame.Parent = secContainer
-				Instance.new("UICorner", ddFrame).CornerRadius = UDim.new(0, 4)
+				Instance.new("UICorner", ddFrame).CornerRadius = UDim.new(0, 2)
 
 				local label = Instance.new("TextLabel")
 				label.Size = UDim2.new(0.5, 0, 0, 36)
@@ -547,8 +590,8 @@ function Bloxium:CreateWindow(config)
 				label.BackgroundTransparency = 1
 				label.Text = ddName
 				label.TextColor3 = Bloxium.Theme.Text
-				label.Font = Enum.Font.GothamSemibold
-				label.TextSize = 13
+				label.Font = Enum.Font.SourceSansSemibold
+				label.TextSize = 12
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = ddFrame
 
@@ -561,7 +604,7 @@ function Bloxium:CreateWindow(config)
 				openBtn.Font = Enum.Font.Gotham
 				openBtn.TextSize = 12
 				openBtn.Parent = ddFrame
-				Instance.new("UICorner", openBtn).CornerRadius = UDim.new(0, 4)
+				Instance.new("UICorner", openBtn).CornerRadius = UDim.new(0, 2)
 
 				local optionContainer = Instance.new("Frame")
 				optionContainer.Size = UDim2.new(1, -20, 0, #options * 26)
@@ -590,7 +633,7 @@ function Bloxium:CreateWindow(config)
 					optBtn.Font = Enum.Font.Gotham
 					optBtn.TextSize = 12
 					optBtn.Parent = optionContainer
-					Instance.new("UICorner", optBtn).CornerRadius = UDim.new(0, 4)
+					Instance.new("UICorner", optBtn).CornerRadius = UDim.new(0, 2)
 
 					optBtn.MouseButton1Click:Connect(function()
 						isOpen = false
@@ -612,7 +655,7 @@ function Bloxium:CreateWindow(config)
 				inputFrame.Size = UDim2.new(1, 0, 0, 36)
 				inputFrame.BackgroundColor3 = Bloxium.Theme.Element
 				inputFrame.Parent = secContainer
-				Instance.new("UICorner", inputFrame).CornerRadius = UDim.new(0, 4)
+				Instance.new("UICorner", inputFrame).CornerRadius = UDim.new(0, 2)
 
 				local label = Instance.new("TextLabel")
 				label.Size = UDim2.new(0.5, 0, 1, 0)
@@ -620,8 +663,8 @@ function Bloxium:CreateWindow(config)
 				label.BackgroundTransparency = 1
 				label.Text = txtName
 				label.TextColor3 = Bloxium.Theme.Text
-				label.Font = Enum.Font.GothamSemibold
-				label.TextSize = 13
+				label.Font = Enum.Font.SourceSansSemibold
+				label.TextSize = 12
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = inputFrame
 
@@ -636,7 +679,7 @@ function Bloxium:CreateWindow(config)
 				textBox.Font = Enum.Font.Gotham
 				textBox.TextSize = 12
 				textBox.Parent = inputFrame
-				Instance.new("UICorner", textBox).CornerRadius = UDim.new(0, 4)
+				Instance.new("UICorner", textBox).CornerRadius = UDim.new(0, 2)
 
 				textBox.FocusLost:Connect(function(enterPressed)
 					callback(textBox.Text, enterPressed)
@@ -653,7 +696,7 @@ function Bloxium:CreateWindow(config)
 				bindFrame.Size = UDim2.new(1, 0, 0, 36)
 				bindFrame.BackgroundColor3 = Bloxium.Theme.Element
 				bindFrame.Parent = secContainer
-				Instance.new("UICorner", bindFrame).CornerRadius = UDim.new(0, 4)
+				Instance.new("UICorner", bindFrame).CornerRadius = UDim.new(0, 2)
 
 				local label = Instance.new("TextLabel")
 				label.Size = UDim2.new(0.5, 0, 1, 0)
@@ -661,8 +704,8 @@ function Bloxium:CreateWindow(config)
 				label.BackgroundTransparency = 1
 				label.Text = kbName
 				label.TextColor3 = Bloxium.Theme.Text
-				label.Font = Enum.Font.GothamSemibold
-				label.TextSize = 13
+				label.Font = Enum.Font.SourceSansSemibold
+				label.TextSize = 12
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = bindFrame
 
@@ -675,7 +718,7 @@ function Bloxium:CreateWindow(config)
 				bindBtn.Font = Enum.Font.GothamBold
 				bindBtn.TextSize = 12
 				bindBtn.Parent = bindFrame
-				Instance.new("UICorner", bindBtn).CornerRadius = UDim.new(0, 4)
+				Instance.new("UICorner", bindBtn).CornerRadius = UDim.new(0, 2)
 
 				local currentKey = defaultKey
 				local isListening = false
